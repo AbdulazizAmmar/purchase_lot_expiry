@@ -13,7 +13,7 @@ class StockMove(models.Model):
         help="Formatted list of expiry dates for assigned lot(s) in this stock move."
     )
 
-    @api.depends('lot_ids', 'lot_ids.expiration_date', 'move_line_ids.expiration_date', 'move_line_ids.lot_id')
+    @api.depends('move_line_ids.expiration_date', 'move_line_ids.lot_id', 'move_line_ids.lot_id.expiration_date')
     def _compute_lot_expiry_display(self):
         for move in self:
             expiries = []
