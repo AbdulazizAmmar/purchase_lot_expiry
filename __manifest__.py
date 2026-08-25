@@ -12,10 +12,10 @@ Expiration Dates directly within Purchase Order lines.
 
 Key Features:
 - Assign Lot/Serial Numbers and Expiration Dates on Purchase Order lines.
-- Display Lot/Serial Numbers as tags (using widget="many2many_tags") across Purchase Orders, Stock Pickings, and Vendor Bills.
-- Display Expiration Dates as styled badges/tags across Purchase Orders, Stock Pickings, and Vendor Bills.
+- Force 'Create and Edit...' dialog when creating new lots to ensure expiration dates are captured.
+- Show lot & expiration fields only for products tracked by lot/serial.
+- Redistribute quantities across multiple assigned lots via interactive wizard.
 - Direct synchronization from Purchase Order lines to Stock Moves / Pickings and Account Move Lines (Vendor Bills).
-- Dynamic lot domain filtering per product to prevent errors.
 """,
     'author': 'Antigravity',
     'website': 'https://www.odoo.com',
@@ -25,6 +25,8 @@ Key Features:
         'product_expiry',
     ],
     'data': [
+        'security/ir.model.access.csv',
+        'wizard/purchase_lot_redistribute_wizard_views.xml',
         'views/purchase_order_views.xml',
         'views/stock_picking_views.xml',
         'views/account_move_views.xml',

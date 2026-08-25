@@ -6,6 +6,11 @@ from datetime import datetime
 class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
 
+    product_tracking = fields.Selection(
+        related='product_id.tracking',
+        string='Product Tracking',
+        readonly=True
+    )
     lot_ids = fields.Many2many(
         'stock.lot',
         'account_move_line_stock_lot_rel',

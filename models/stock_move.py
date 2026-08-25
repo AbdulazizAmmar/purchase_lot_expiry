@@ -6,6 +6,11 @@ from datetime import datetime
 class StockMove(models.Model):
     _inherit = 'stock.move'
 
+    product_tracking = fields.Selection(
+        related='product_id.tracking',
+        string='Product Tracking',
+        readonly=True
+    )
     lot_expiry_display = fields.Char(
         string='Expiry Dates',
         compute='_compute_lot_expiry_display',

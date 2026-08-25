@@ -6,18 +6,24 @@
         <field name="model">purchase.order</field>
         <field name="inherit_id" ref="purchase.purchase_order_form"/>
         <field name="arch" type="xml">
-            <!-- Add Lot and Expiry fields in Order Line list view -->
+            <!-- Add Lot, Expiry fields, and Redistribute Button in Order Line list view -->
             <xpath expr="//field[@name='order_line']/list/field[@name='price_unit']" position="after">
-                <field name="lot_ids" widget="many2many_tags" optional="show" domain="[('product_id', '=', product_id)]" context="{'default_product_id': product_id}"/>
-                <field name="expiration_date" optional="hide"/>
-                <field name="lot_expiry_display" widget="badge" decoration-info="1" optional="show"/>
+                <field name="product_tracking" column_invisible="True"/>
+                <field name="show_redistribute_button" column_invisible="True"/>
+                <field name="lot_ids" widget="many2many_tags" optional="show" domain="[('product_id', '=', product_id)]" context="{'default_product_id': product_id}" options="{'no_quick_create': True}" invisible="not product_tracking or product_tracking == 'none'"/>
+                <field name="expiration_date" optional="hide" invisible="not product_tracking or product_tracking == 'none'"/>
+                <field name="lot_expiry_display" widget="badge" decoration-info="1" optional="show" invisible="not product_tracking or product_tracking == 'none'"/>
+                <button name="action_open_lot_redistribution_wizard" type="object" icon="fa-balance-scale" title="Redistribute Lot Quantities" invisible="not show_redistribute_button" string="Redistribute"/>
             </xpath>
 
             <!-- Add Lot and Expiry fields in Order Line form view -->
             <xpath expr="//field[@name='order_line']/form//field[@name='price_unit']" position="after">
-                <field name="lot_ids" widget="many2many_tags" domain="[('product_id', '=', product_id)]" context="{'default_product_id': product_id}"/>
-                <field name="expiration_date"/>
-                <field name="lot_expiry_display" widget="badge" decoration-info="1"/>
+                <field name="product_tracking" invisible="1"/>
+                <field name="show_redistribute_button" invisible="1"/>
+                <field name="lot_ids" widget="many2many_tags" domain="[('product_id', '=', product_id)]" context="{'default_product_id': product_id}" options="{'no_quick_create': True}" invisible="not product_tracking or product_tracking == 'none'"/>
+                <field name="expiration_date" invisible="not product_tracking or product_tracking == 'none'"/>
+                <field name="lot_expiry_display" widget="badge" decoration-info="1" invisible="not product_tracking or product_tracking == 'none'"/>
+                <button name="action_open_lot_redistribution_wizard" type="object" icon="fa-balance-scale" title="Redistribute Lot Quantities" invisible="not show_redistribute_button" string="Redistribute Lot Qty" class="btn btn-secondary mt-2"/>
             </xpath>
         </field>
     </record>
@@ -29,9 +35,12 @@
         <field name="inherit_id" ref="purchase.purchase_order_line_tree"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='product_qty']" position="after">
-                <field name="lot_ids" widget="many2many_tags" optional="show"/>
-                <field name="expiration_date" optional="hide"/>
-                <field name="lot_expiry_display" widget="badge" decoration-info="1" optional="show"/>
+                <field name="product_tracking" column_invisible="True"/>
+                <field name="show_redistribute_button" column_invisible="True"/>
+                <field name="lot_ids" widget="many2many_tags" optional="show" options="{'no_quick_create': True}" invisible="not product_tracking or product_tracking == 'none'"/>
+                <field name="expiration_date" optional="hide" invisible="not product_tracking or product_tracking == 'none'"/>
+                <field name="lot_expiry_display" widget="badge" decoration-info="1" optional="show" invisible="not product_tracking or product_tracking == 'none'"/>
+                <button name="action_open_lot_redistribution_wizard" type="object" icon="fa-balance-scale" title="Redistribute Lot Quantities" invisible="not show_redistribute_button"/>
             </xpath>
         </field>
     </record>
@@ -43,9 +52,12 @@
         <field name="inherit_id" ref="purchase.purchase_order_line_form2"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='price_unit']" position="after">
-                <field name="lot_ids" widget="many2many_tags" domain="[('product_id', '=', product_id)]"/>
-                <field name="expiration_date"/>
-                <field name="lot_expiry_display" widget="badge" decoration-info="1"/>
+                <field name="product_tracking" invisible="1"/>
+                <field name="show_redistribute_button" invisible="1"/>
+                <field name="lot_ids" widget="many2many_tags" domain="[('product_id', '=', product_id)]" options="{'no_quick_create': True}" invisible="not product_tracking or product_tracking == 'none'"/>
+                <field name="expiration_date" invisible="not product_tracking or product_tracking == 'none'"/>
+                <field name="lot_expiry_display" widget="badge" decoration-info="1" invisible="not product_tracking or product_tracking == 'none'"/>
+                <button name="action_open_lot_redistribution_wizard" type="object" icon="fa-balance-scale" title="Redistribute Lot Quantities" invisible="not show_redistribute_button" string="Redistribute Lot Qty" class="btn btn-secondary mt-2"/>
             </xpath>
         </field>
     </record>

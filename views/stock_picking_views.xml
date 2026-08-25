@@ -8,9 +8,16 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='move_ids']/list//field[@name='lot_ids']" position="attributes">
                 <attribute name="optional">show</attribute>
+                <attribute name="options">{'no_quick_create': True}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='move_ids']/list//field[@name='lot_ids']" position="before">
+                <field name="product_tracking" column_invisible="True"/>
+            </xpath>
+            <xpath expr="//field[@name='move_ids']/list//field[@name='lot_ids']" position="attributes">
+                <attribute name="invisible">not product_tracking or product_tracking == 'none'</attribute>
             </xpath>
             <xpath expr="//field[@name='move_ids']/list//field[@name='lot_ids']" position="after">
-                <field name="lot_expiry_display" widget="badge" decoration-info="1" optional="show"/>
+                <field name="lot_expiry_display" widget="badge" decoration-info="1" optional="show" invisible="not product_tracking or product_tracking == 'none'"/>
             </xpath>
         </field>
     </record>
@@ -22,8 +29,9 @@
         <field name="inherit_id" ref="stock.view_move_tree"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='product_uom']" position="after">
-                <field name="lot_ids" widget="many2many_tags" optional="show"/>
-                <field name="lot_expiry_display" widget="badge" decoration-info="1" optional="show"/>
+                <field name="product_tracking" column_invisible="True"/>
+                <field name="lot_ids" widget="many2many_tags" optional="show" options="{'no_quick_create': True}" invisible="not product_tracking or product_tracking == 'none'"/>
+                <field name="lot_expiry_display" widget="badge" decoration-info="1" optional="show" invisible="not product_tracking or product_tracking == 'none'"/>
             </xpath>
         </field>
     </record>
@@ -35,8 +43,9 @@
         <field name="inherit_id" ref="stock.view_move_form"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='product_id']" position="after">
-                <field name="lot_ids" widget="many2many_tags"/>
-                <field name="lot_expiry_display" widget="badge" decoration-info="1"/>
+                <field name="product_tracking" invisible="1"/>
+                <field name="lot_ids" widget="many2many_tags" options="{'no_quick_create': True}" invisible="not product_tracking or product_tracking == 'none'"/>
+                <field name="lot_expiry_display" widget="badge" decoration-info="1" invisible="not product_tracking or product_tracking == 'none'"/>
             </xpath>
         </field>
     </record>
