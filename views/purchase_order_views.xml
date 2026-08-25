@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Inherit Purchase Order Form View to add Lot and Expiry fields to Order Lines -->
+    <record id="purchase_order_form_inherit_lot_expiry" model="ir.ui.view">
+        <field name="name">purchase.order.form.inherit.lot.expiry</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <!-- Add Lot and Expiry fields in Order Line list view -->
+            <xpath expr="//field[@name='order_line']/list/field[@name='price_unit']" position="after">
+                <field name="lot_ids" widget="many2many_tags" optional="show" domain="[('product_id', '=', product_id)]" context="{'default_product_id': product_id}"/>
+                <field name="expiration_date" optional="hide"/>
+                <field name="lot_expiry_display" widget="badge" decoration-info="1" optional="show"/>
+            </xpath>
+
+            <!-- Add Lot and Expiry fields in Order Line form view -->
+            <xpath expr="//field[@name='order_line']/form//field[@name='price_unit']" position="after">
+                <field name="lot_ids" widget="many2many_tags" domain="[('product_id', '=', product_id)]" context="{'default_product_id': product_id}"/>
+                <field name="expiration_date"/>
+                <field name="lot_expiry_display" widget="badge" decoration-info="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Inherit Purchase Order Line List View -->
+    <record id="purchase_order_line_tree_inherit_lot_expiry" model="ir.ui.view">
+        <field name="name">purchase.order.line.list.inherit.lot.expiry</field>
+        <field name="model">purchase.order.line</field>
+        <field name="inherit_id" ref="purchase.purchase_order_line_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='product_qty']" position="after">
+                <field name="lot_ids" widget="many2many_tags" optional="show"/>
+                <field name="expiration_date" optional="hide"/>
+                <field name="lot_expiry_display" widget="badge" decoration-info="1" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Inherit Purchase Order Line Form View -->
+    <record id="purchase_order_line_form2_inherit_lot_expiry" model="ir.ui.view">
+        <field name="name">purchase.order.line.form2.inherit.lot.expiry</field>
+        <field name="model">purchase.order.line</field>
+        <field name="inherit_id" ref="purchase.purchase_order_line_form2"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='price_unit']" position="after">
+                <field name="lot_ids" widget="many2many_tags" domain="[('product_id', '=', product_id)]"/>
+                <field name="expiration_date"/>
+                <field name="lot_expiry_display" widget="badge" decoration-info="1"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,33 @@
+# -*- coding: utf-8 -*-
+from odoo import models, fields, api
+from datetime import datetime
+
+
+class StockMove(models.Model):
+    _inherit = 'stock.move'
+
+    lot_expiry_display = fields.Char(
+        string='Expiry Dates',
+        compute='_compute_lot_expiry_display',
+        store=True,
+        help="Formatted list of expiry dates for assigned lot(s) in this stock move."
+    )
+
+    @api.depends('lot_ids', 'lot_ids.expiration_date', 'move_line_ids.expiration_date', 'move_line_ids.lot_id')
+    def _compute_lot_expiry_display(self):
+        for move in self:
+            expiries = []
+            lots = move.lot_ids | move.move_line_ids.lot_id
+            for lot in lots:
+                if lot.expiration_date:
+                    exp_date = lot.expiration_date.date() if isinstance(lot.expiration_date, datetime) else lot.expiration_date
+                    exp_str = fields.Date.to_string(exp_date)
+                    if exp_str not in expiries:
+                        expiries.append(exp_str)
+            for ml in move.move_line_ids:
+                if ml.expiration_date and not ml.lot_id:
+                    exp_date = ml.expiration_date.date() if isinstance(ml.expiration_date, datetime) else ml.expiration_date
+                    exp_str = fields.Date.to_string(exp_date)
+                    if exp_str not in expiries:
+                        expiries.append(exp_str)
+            move.lot_expiry_display = ", ".join(sorted(set(expiries))) if expiries else ""
