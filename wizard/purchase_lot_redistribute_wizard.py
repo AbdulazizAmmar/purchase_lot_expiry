@@ -27,7 +27,7 @@ class PurchaseLotRedistributeWizard(models.TransientModel):
     )
     product_uom_id = fields.Many2one(
         'uom.uom',
-        related='purchase_line_id.product_uom',
+        related='purchase_line_id.product_uom_id',
         string='Unit of Measure',
         readonly=True
     )
